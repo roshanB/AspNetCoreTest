@@ -1,0 +1,148 @@
+﻿@using YoYoTest.Business.Test
+
+@model TestVm
+@{
+    int athCounter = 1;
+}
+
+<div class="test-container container-fluid">
+    <div class="row yo-pt-20">
+        <div class="col-2">
+            <i class="fas fa-chevron-left mt-1" onclick="window.location.href='@Url.Action("", "")';"></i>
+        </div>
+        <div class="col-10 text-center">
+            <h5 class="mr-5">YoYo Test</h5>
+        </div>
+    </div>
+    <div class="row yo-pt-20">
+        <div class="col">
+            <div class="d-flex justify-content-center" id="divProgress">
+                <div class="progress mx-auto" data-value='80'>
+                    <span class="progress-left">
+                        <span class="progress-bar border-primary"></span>
+                    </span>
+                    <span class="progress-right">
+                        <span class="progress-bar border-primary"></span>
+                    </span>
+                    <div class="progress-value w-100 h-100 rounded-circle d-flex align-items-center justify-content-center">
+                        <div id="divTestStatus" class="align-items-center justify-content-center">
+                            <div id="test-status-start-button">
+                                <div class="row">
+                                    <div class="col">
+                                        <i class="fas fa-play start-button"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="test-status-data">
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="gray-font">Level</span> <span class="gray-font" id="spnLevel"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="gray-font">Shuttle</span> <span class="gray-font" id="spnShuttleNo"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <span id="spnSpeed"></span> km/h
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row yo-pt-20">
+        <div class="col">
+            <div class="live-status d-flex justify-content-center">
+                <div class="row">
+                    <div class="col-4 right-border">
+                        <div class="justify-content-center text-center" id="divNextShuttle">
+                            <span class="gray-font">NEXT</span>
+                            <span class="gray-font">SHUTTLE</span>
+                            <span id="spnNextShuttle">00:00 s</span>
+                        </div>
+                    </div>
+                    <div class="col-4 right-border">
+                        <div class="justify-content-center text-center" id="divTotalTime">
+                            <span class="gray-font">TOTAL</span>
+                            <span class="gray-font">TIME</span>
+                            <span id="spnTotalTime">00:00</span> m
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="justify-content-center text-center" id="divTotalDistance">
+                            <span class="gray-font">TOTAL</span>
+                            <span class="gray-font">DISTANCE</span>
+                            <span id="spnTotalDist">0</span> m
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row athletes fw-600">
+        <div class="col p-0">
+            <form id="frmTest" method="post" action="test/result">
+                <div class="row track">
+                    <div class="col">
+                        <span class="pb-2 d-block">Track</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        @foreach (var athlete in Model.Athletes)
+                        {
+                            <div class="handle-test row" data-athid="@athlete.Id">
+                                <div class="col-6">
+                                    <span class="pb-2 pt-2 d-block">
+                                        @string.Format("{0}. {1} {2}", athCounter, athlete.FirstName, athlete.LastName)
+                                        @*<input type="hidden" name="@("fname_" + athlete.Id)" value="@athlete.FirstName" />
+                                            <input type="hidden" name="@("lname_" + athlete.Id)" value="@athlete.LastName" />*@
+
+                                        @Html.HiddenFor(m => m.Athletes.ToList()[athCounter - 1].Id)
+                                        @Html.HiddenFor(m => m.Athletes.ToList()[athCounter - 1].FirstName)
+                                        @Html.HiddenFor(m => m.Athletes.ToList()[athCounter - 1].LastName)
+                                    </span>
+                                </div>
+                                <div class="col-3 pb-2 pt-2">
+                                    <button class="btn warn " type="button">Warn</button>
+                                </div>
+                                <div class="col-3 pb-2 pt-2">
+                                    <button class="btn stop " type="button">Stop</button>
+
+                                    <div class="results">
+                                        <select name="@(string.Format("[{0}].Result", athCounter - 1))"
+                                                asp-items="@(Model.Results.Select(n => new SelectListItem {
+                                                            Value = n.ToString(),
+                                                            Text = n.ToString() }).ToList())">
+                                            <option value="NA">NA</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            athCounter++;
+                        }
+                    </div>
+                </div>
+                <div class=" row mt-3">
+                    <div class="col p-0">
+                        <div class="float-right">
+                            <input type="submit" id="btnSubmitResult" class="btn yoyo-btn" value="Submit Result" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/test.js" asp-append-version="true"></script>
+    <script src="~/lib/JSONfn/JSONfn.js" asp-append-version="true"></script>
+}

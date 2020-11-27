@@ -1,0 +1,30 @@
+﻿@using YoYoTest.Business.Athletes
+
+@model AthletesVm
+
+<div class="row justify-content-center">
+    <div class="col-4">
+        <ul class="list-group">
+
+            @{
+                foreach (var athlete in Model.Athletes)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @string.Format("{0} {1}", athlete.FirstName, athlete.LastName)
+                        @if (!string.IsNullOrEmpty(athlete.Result))
+                        {
+                            <span class="badge badge-primary badge-pill">@athlete.Result</span>
+                        }
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-4 p-3">
+        <div class="float-right">
+            <button type="button" onclick="window.location.href='@Url.Action("", "test")';" class="btn yoyo-btn">Go To Test Page</button>
+        </div>
+    </div>
+</div>
